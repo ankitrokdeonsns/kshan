@@ -64,8 +64,15 @@ module.exports = function(grunt) {
         files: '<%= jshint.lib_test.src %>',
         tasks: ['jshint:lib_test', 'nodeunit']
       }
+    },
+    jasmine : {
+      // Your project's source files
+      src : ['src/**/*.js', 'spec/**/*Helper.js'],
+      options : {
+        specs : 'spec/**/*Spec.js'
+      }
     }
-  });
+ });
 
   // These plugins provide necessary tasks.
   grunt.loadNpmTasks('grunt-contrib-concat');
@@ -73,7 +80,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-nodeunit');
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-watch');
-
+  grunt.loadNpmTasks('grunt-contrib-jasmine');
   // Default task.
   grunt.registerTask('default', ['jshint', 'nodeunit', 'concat', 'uglify']);
 
