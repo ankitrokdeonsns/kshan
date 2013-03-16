@@ -9,5 +9,8 @@
   "repository": "",
   "author": "",
   "license": "BSD",
-  "readmeFilename": "README.md"
+  "readmeFilename": "README.md",
+  "devDependencies": {
+    "grunt-contrib-jasmine": "~0.4.1"
+  }
 }
