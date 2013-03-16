@@ -1,0 +1,13 @@
+{
+  "name": "kshan",
+  "version": "0.0.0",
+  "description": "1.Why not timezone.js or walltime.js they require tz database files to be included for set up",
+  "main": "Gruntfile.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": "",
+  "author": "",
+  "license": "BSD",
+  "readmeFilename": "README.md"
+}
