@@ -1,14 +1,18 @@
-Kshan = (function(){
-    var d = new Date();
+Kshan = (function(unixEpoch){
+    var _date;
+    if(unixEpoch !== undefined && unixEpoch !== null)
+        _date = new Date(unixEpoch);
+    else
+        _date = new Date();
     return {
         date: function(){
-            return d.getUTCDate();
+            return _date.getUTCDate();
         },
         month: function(){
-            return d.getUTCMonth();
+            return _date.getUTCMonth();
         },
         year: function(){
-            return d.getUTCFullYear();
+            return _date.getUTCFullYear();
         }
     }
 });
