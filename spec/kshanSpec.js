@@ -60,4 +60,12 @@ describe("kshan test suit", function(){
         var kshan = Kshan(1, null);
         expect(kshan.timezone()).toEqual("Etc/UTC");
     });
+
+    it("comparison of kshans", function(){
+        var smallerKshan = Kshan(1361618782000);
+        var largerKshan = Kshan(1361695749000);
+        expect(smallerKshan.compare(largerKshan)).toEqual(-1);
+        expect(largerKshan.compare(smallerKshan)).toEqual(1);
+        expect(largerKshan.compare(largerKshan)).toEqual(0);
+    });
 });

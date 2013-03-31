@@ -128,6 +128,13 @@ Kshan = (function(unixEpoch, timezone){
         },
         timeStamp: function(){
             return _timeStamp;
+        },
+        compare:function(other){
+            if(_timeStamp < other.timeStamp())
+                return -1;
+            else if (_timeStamp > other.timeStamp())
+                return 1;
+            return 0;
         }
     }
 });
