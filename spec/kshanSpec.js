@@ -26,6 +26,7 @@ describe("kshan test suit", function(){
         expectDateMonthYearAndDayToBeEqual(expectedDate, utcKshan);
         expectHoursMinutesSecondsAndMillisecondsToBeEqual(expectedDate, utcKshan);
         expect("Etc/UTC").toEqual(utcKshan.timezone());
+        expect(1361618782000).toEqual(utcKshan.timeStamp());
     });
 
     it("should construct utc kshan for today when provided unix timestamp is undefined", function(){
