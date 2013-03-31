@@ -13,6 +13,21 @@ Kshan = (function(unixEpoch){
         },
         year: function(){
             return _date.getUTCFullYear();
+        },
+        hours:function () {
+            return _date.getUTCHours();
+        },
+        minutes:function () {
+            return _date.getUTCMinutes();
+        },
+        seconds:function () {
+            return _date.getUTCSeconds();
+        },
+        milliseconds:function () {
+            return _date.getUTCMilliseconds();
+        },
+        day:function(){
+            return _date.getUTCDay();
         }
     }
 });
