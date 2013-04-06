@@ -79,8 +79,11 @@ Kshan = (function(unixEpoch, timezone){
     var _timeStamp;
 
     var create = function(unixEpoch, timezone){
-        if(timezone === undefined || timezone === null)
+        _timeStamp = unixEpoch;
+
+        if(timezone === undefined || timezone === null) {
             timezone = "Etc/UTC";
+        }
         _timezone = timezone;
 
         var _timezoneOffsetKeys = timezoneOffsetFor[_timezone].split(",");
@@ -89,8 +92,8 @@ Kshan = (function(unixEpoch, timezone){
         if (_timezone !== "Etc/UTC") {
             unixEpoch += (timezoneOffsetInMinutes * 60000);
         }
-        _timeStamp = unixEpoch;
-        _date = new Date(_timeStamp);
+
+        _date = new Date(unixEpoch);
     };
 
     if(unixEpoch !== undefined && unixEpoch !== null)

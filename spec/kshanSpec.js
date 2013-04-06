@@ -21,12 +21,12 @@ describe("kshan test suit", function(){
     });
 
     it("should construct utc kshan for provided unix timestamp", function(){
-        var utcKshan = Kshan(1361618782000);
-        var expectedDate = new Date(1361618782000);
+        var utcKshan = Kshan(0);
+        var expectedDate = new Date(0);
         expectDateMonthYearAndDayToBeEqual(expectedDate, utcKshan);
         expectHoursMinutesSecondsAndMillisecondsToBeEqual(expectedDate, utcKshan);
         expect("Etc/UTC").toEqual(utcKshan.timezone());
-        expect(1361618782000).toEqual(utcKshan.timeStamp());
+        expect(0).toEqual(utcKshan.timeStamp());
     });
 
     it("should construct utc kshan for today when provided unix timestamp is undefined", function(){
@@ -44,15 +44,16 @@ describe("kshan test suit", function(){
     });
 
     it("should construct kshan from unix epoch and timezone for india timezone (not observing DST)", function(){
-        var kshan = Kshan(1361618782000, "Asia/Kolkata");
-        expect(kshan.date()).toEqual(23);
-        expect(kshan.month()).toEqual(1);
-        expect(kshan.year()).toEqual(2013);
-        expect(kshan.hours()).toEqual(16);
-        expect(kshan.minutes()).toEqual(56);
-        expect(kshan.seconds()).toEqual(22);
+        var kshan = Kshan(0, "Asia/Kolkata");
+        expect(kshan.date()).toEqual(1);
+        expect(kshan.month()).toEqual(0);
+        expect(kshan.year()).toEqual(1970);
+        expect(kshan.hours()).toEqual(5);
+        expect(kshan.minutes()).toEqual(30);
+        expect(kshan.seconds()).toEqual(0);
         expect(kshan.milliseconds()).toEqual(0);
-        expect(kshan.day()).toEqual(6);
+        expect(kshan.day()).toEqual(4);
+        expect(kshan.timeStamp()).toEqual(0);
         expect(kshan.timezone()).toEqual("Asia/Kolkata");
     });
 
