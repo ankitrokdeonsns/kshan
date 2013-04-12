@@ -69,4 +69,61 @@ describe("kshan test suit", function(){
         expect(largerKshan.compare(smallerKshan)).toEqual(1);
         expect(largerKshan.compare(largerKshan)).toEqual(0);
     });
+
+    it("should construct utc kshan for datetime string", function(){
+        var kshan = Kshan("Jan 1, 1970");
+        expect(kshan.date()).toEqual(1);
+        expect(kshan.month()).toEqual(0);
+        expect(kshan.year()).toEqual(1970);
+        expect(kshan.hours()).toEqual(0);
+        expect(kshan.minutes()).toEqual(0);
+        expect(kshan.seconds()).toEqual(0);
+        expect(kshan.milliseconds()).toEqual(0);
+        expect(kshan.day()).toEqual(4);
+        expect(kshan.timeStamp()).toEqual(0);
+        expect(kshan.timezone()).toEqual("Etc/UTC");
+    });
+
+    it("should construct utc kshan for datetime string with 'GMT' already present in it", function(){
+        var kshan = Kshan("Jan 1, 1970 GMT");
+        expect(kshan.date()).toEqual(1);
+        expect(kshan.month()).toEqual(0);
+        expect(kshan.year()).toEqual(1970);
+        expect(kshan.hours()).toEqual(0);
+        expect(kshan.minutes()).toEqual(0);
+        expect(kshan.seconds()).toEqual(0);
+        expect(kshan.milliseconds()).toEqual(0);
+        expect(kshan.day()).toEqual(4);
+        expect(kshan.timeStamp()).toEqual(0);
+        expect(kshan.timezone()).toEqual("Etc/UTC");
+    });
+
+    it("should construct utc kshan for datetime string with 'GMT' already present and ignoring timezone offset in it", function(){
+        var kshan = Kshan("Jan 1, 1970 GMT+0530");
+        expect(kshan.date()).toEqual(1);
+        expect(kshan.month()).toEqual(0);
+        expect(kshan.year()).toEqual(1970);
+        expect(kshan.hours()).toEqual(0);
+        expect(kshan.minutes()).toEqual(0);
+        expect(kshan.seconds()).toEqual(0);
+        expect(kshan.milliseconds()).toEqual(0);
+        expect(kshan.day()).toEqual(4);
+        expect(kshan.timeStamp()).toEqual(0);
+        expect(kshan.timezone()).toEqual("Etc/UTC");
+    });
+
+    it("should construct utc kshan for datetime string for timezone (not observing DST)", function(){
+        var kshan = Kshan("Jan 1, 1970", "Asia/Kolkata");
+        expect(kshan.date()).toEqual(1);
+        expect(kshan.month()).toEqual(0);
+        expect(kshan.year()).toEqual(1970);
+        expect(kshan.hours()).toEqual(0);
+        expect(kshan.minutes()).toEqual(0);
+        expect(kshan.seconds()).toEqual(0);
+        expect(kshan.milliseconds()).toEqual(0);
+        expect(kshan.day()).toEqual(4);
+        expect(kshan.timeStamp()).toEqual(-19800000);
+        expect(kshan.timezone()).toEqual("Asia/Kolkata");
+    });
+
 });

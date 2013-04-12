@@ -79,8 +79,6 @@ Kshan = (function(unixEpoch, timezone){
     var _timeStamp;
 
     var create = function(unixEpoch, timezone){
-        _timeStamp = unixEpoch;
-
         if(timezone === undefined || timezone === null) {
             timezone = "Etc/UTC";
         }
@@ -89,8 +87,23 @@ Kshan = (function(unixEpoch, timezone){
         var _timezoneOffsetKeys = timezoneOffsetFor[_timezone].split(",");
         var timezoneOffsetInMinutes = parseInt(_timezoneOffsetKeys[0]) + 60*parseInt(_timezoneOffsetKeys[1]);
 
-        if (_timezone !== "Etc/UTC") {
+        if(typeof unixEpoch == "number"){
+            _timeStamp = unixEpoch;
+            if (_timezone !== "Etc/UTC") {
             unixEpoch += (timezoneOffsetInMinutes * 60000);
+            }
+        }
+
+        if(typeof unixEpoch === "string"){
+            if(unixEpoch.indexOf("GMT") === -1)
+                unixEpoch += " GMT";
+            unixEpoch = unixEpoch.substring(0, unixEpoch.indexOf("GMT")+3);
+            unixEpoch = (new Date(unixEpoch)).getTime();
+
+            _timeStamp = unixEpoch;
+            if (_timezone !== "Etc/UTC") {
+                _timeStamp -= (timezoneOffsetInMinutes * 60000);
+            }
         }
 
         _date = new Date(unixEpoch);
