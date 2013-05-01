@@ -1,95 +1,569 @@
 Kshan = (function(unixEpoch, timezone){
 
-    var timezoneOffsetFor = {
-        'Etc/GMT+12' : '-720,0' ,
-        'Pacific/Pago_Pago' : '-660,0' ,
-        'America/Adak' : '-600,1' ,
-        'Pacific/Honolulu' : '-600,0' ,
-        'Pacific/Marquesas' : '-570,0' ,
-        'Pacific/Gambier' : '-540,0' ,
-        'America/Anchorage' : '-540,1' ,
-        'America/Los_Angeles' : '-480,1' ,
-        'Pacific/Pitcairn' : '-480,0' ,
-        'America/Phoenix' : '-420,0' ,
-        'America/Denver' : '-420,1' ,
-        'America/Guatemala' : '-360,0' ,
-        'America/Chicago' : '-360,1' ,
-        'Pacific/Easter' : '-360,1,s' ,
-        'America/Bogota' : '-300,0' ,
-        'America/New_York' : '-300,1' ,
-        'America/Caracas' : '-270,0' ,
-        'America/Halifax' : '-240,1' ,
-        'America/Santo_Domingo' : '-240,0' ,
-        'America/Santiago' : '-240,1,s' ,
-        'America/St_Johns' : '-210,1' ,
-        'America/Godthab' : '-180,1' ,
-        'America/Argentina/Buenos_Aires' : '-180,0' ,
-        'America/Montevideo' : '-180,1,s' ,
-        'Etc/GMT+2' : '-120,0' ,
-        'Etc/GMT+2' : '-120,1' ,
-        'Atlantic/Azores' : '-60,1' ,
-        'Atlantic/Cape_Verde' : '-60,0' ,
-        'Etc/UTC' : '0,0' ,
-        'Europe/London' : '0,1' ,
-        'Europe/Berlin' : '60,1' ,
-        'Africa/Lagos' : '60,0' ,
-        'Africa/Windhoek' : '60,1,s' ,
-        'Asia/Beirut' : '120,1' ,
-        'Africa/Johannesburg' : '120,0' ,
-        'Asia/Baghdad' : '180,0' ,
-        'Europe/Moscow' : '180,1' ,
-        'Asia/Tehran' : '210,1' ,
-        'Asia/Dubai' : '240,0' ,
-        'Asia/Baku' : '240,1' ,
-        'Asia/Kabul' : '270,0' ,
-        'Asia/Yekaterinburg' : '300,1' ,
-        'Asia/Karachi' : '300,0' ,
-        'Asia/Kolkata' : '330,0' ,
-        'Asia/Kathmandu' : '345,0' ,
-        'Asia/Dhaka' : '360,0' ,
-        'Asia/Omsk' : '360,1' ,
-        'Asia/Rangoon' : '390,0' ,
-        'Asia/Krasnoyarsk' : '420,1' ,
-        'Asia/Jakarta' : '420,0' ,
-        'Asia/Shanghai' : '480,0' ,
-        'Asia/Irkutsk' : '480,1' ,
-        'Australia/Eucla' : '525,0' ,
-        'Australia/Eucla' : '525,1,s' ,
-        'Asia/Yakutsk' : '540,1' ,
-        'Asia/Tokyo' : '540,0' ,
-        'Australia/Darwin' : '570,0' ,
-        'Australia/Adelaide' : '570,1,s' ,
-        'Australia/Brisbane' : '600,0' ,
-        'Asia/Vladivostok' : '600,1' ,
-        'Australia/Sydney' : '600,1,s' ,
-        'Australia/Lord_Howe' : '630,1,s' ,
-        'Asia/Kamchatka' : '660,1' ,
-        'Pacific/Noumea' : '660,0' ,
-        'Pacific/Norfolk' : '690,0' ,
-        'Pacific/Auckland' : '720,1,s' ,
-        'Pacific/Tarawa' : '720,0' ,
-        'Pacific/Chatham' : '765,1,s' ,
-        'Pacific/Tongatapu' : '780,0' ,
-        'Pacific/Apia' : '780,1,s' ,
-        'Pacific/Kiritimati' : '840,0'
+    var dstRules = {
+        "EU": {
+            "on": {
+                "which": "last",
+                "day": 0,
+                "month": 2,
+                "hours": 1,
+                "minutes": 0,
+                "isUtcTime": true,
+                "offset": 60
+            },
+            "off": {
+                "which": "last",
+                "day": 0,
+                "month": 9,
+                "hours": 1,
+                "minutes": 0,
+                "isUtcTime": true,
+                "offset": 0
+            }
+        },
+        "Thule": {
+            "on": {
+                "which": "second",
+                "day": 0,
+                "month": 2,
+                "hours": 2,
+                "minutes": 0,
+                "isUtcTime": false,
+                "offset": 60
+            },
+            "off": {
+                "which": "first",
+                "day": 0,
+                "month": 10,
+                "hours": 2,
+                "minutes": 0,
+                "isUtcTime": false,
+                "offset": 0
+            }
+        },
+        "Azer": {
+            "on": {
+                "which": "last",
+                "day": 0,
+                "month": 2,
+                "hours": 4,
+                "minutes": 0,
+                "isUtcTime": false,
+                "offset": 60
+            },
+            "off": {
+                "which": "last",
+                "day": 0,
+                "month": 9,
+                "hours": 5,
+                "minutes": 0,
+                "isUtcTime": false,
+                "offset": 0
+            }
+        },
+        "US1": {
+            "on": {
+                "which": "first",
+                "day": 0,
+                "month": 3,
+                "hours": 2,
+                "minutes": 0,
+                "isUtcTime": false,
+                "offset": 60
+            },
+            "off": {
+                "which": "last",
+                "day": 0,
+                "month": 9,
+                "hours": 2,
+                "minutes": 0,
+                "isUtcTime": false,
+                "offset": 0
+            }
+        }, //for mexico as well
+        "US2": {
+            "on": {
+                "which": "second",
+                "day": 0,
+                "month": 2,
+                "hours": 2,
+                "minutes": 0,
+                "isUtcTime": false,
+                "offset": 60
+            },
+            "off": {
+                "which": "first",
+                "day": 0,
+                "month": 10,
+                "hours": 2,
+                "minutes": 0,
+                "isUtcTime": false,
+                "offset": 0
+            }
+        }, //for haiti, cuba after 2012
+        "Cuba": {
+            "on": {
+                "which": "first",
+                "day": 0,
+                "month": 3,
+                "hours": 0,
+                "minutes": 0,
+                "isUtcTime": false,
+                "offset": 60
+            },
+            "off": {
+                "which": "first",
+                "day": 0,
+                "month": 10,
+                "hours": 0,
+                "minutes": 0,
+                "isUtcTime": false,
+                "offset": 0
+            }
+        },
+        "Brazil": {
+            /*
+            * in southern hemisphere off time will be in next year
+            * doesnt handle carnival related exception
+            */
+            "on": {
+                "which": "third",
+                "day": 0,
+                "month": 9,
+                "hours": 0,
+                "minutes": 0,
+                "isUtcTime": false,
+                "offset": 60
+            },
+            "off": {
+                "which": "third",
+                "day": 0,
+                "month": 1,
+                "hours": 0,
+                "minutes": 0,
+                "isUtcTime": false,
+                "offset": 0
+            }
+        },
+        "Chile1": {
+            "on": {
+                "which": "second",
+                "day": 0,
+                "month": 8,
+                "hours": 4,
+                "minutes": 0,
+                "isUtcTime": true,
+                "offset": 60
+            },
+            "off": {
+                "which": "last",
+                "day": 0,
+                "month": 3,
+                "hours": 3,
+                "minutes": 0,
+                "isUtcTime": true,
+                "offset": 0
+            }
+        },
+        "Chile2": {
+            "on": {
+                "which": "first",
+                "day": 6,
+                "month": 8,
+                "hours": 0,
+                "minutes": 0,
+                "isUtcTime": false,
+                "offset": 60
+            },
+            "off": {
+                "which": "last",
+                "day": 6,
+                "month": 3,
+                "hours": 0,
+                "minutes": 0,
+                "isUtcTime": false,
+                "offset": 0
+            }
+        },
+        "Para": {
+            "on": {
+                "which": "first",
+                "day": 0,
+                "month": 9,
+                "hours": 0,
+                "minutes": 0,
+                "isUtcTime": false,
+                "offset": 60
+            },
+            "off": {
+                "which": "third",
+                "day": 0,
+                "month": 2,
+                "hours": 0,
+                "minutes": 0,
+                "isUtcTime": false,
+                "offset": 0
+            }
+        },
+        "Uruguay": {
+            "on": {
+                "which": "first",
+                "day": 0,
+                "month": 9,
+                "hours": 2,
+                "minutes": 0,
+                "isUtcTime": false,
+                "offset": 60
+            },
+            "off": {
+                "which": "second",
+                "day": 0,
+                "month": 2,
+                "hours": 2,
+                "minutes": 0,
+                "isUtcTime": false,
+                "offset": 0
+            }
+        },
+        "Lebanon": {
+            "on": {
+                "which": "last",
+                "day": 0,
+                "month": 2,
+                "hours": 0,
+                "minutes": 0,
+                "isUtcTime": false,
+                "offset": 60
+            },
+            "off": {
+                "which": "last",
+                "day": 0,
+                "month": 9,
+                "hours": 0,
+                "minutes": 0,
+                "isUtcTime": false,
+                "offset": 0
+            }
+        },
+        "Australia": {
+            "on": {
+                "which": "first",
+                "day": 0,
+                "month": 9,
+                "hours": 2,
+                "minutes": 0,
+                "isUtcTime": false,
+                "offset": 60
+            },
+            "off": {
+                "which": "first",
+                "day": 0,
+                "month": 3,
+                "hours": 2,
+                "minutes": 0,
+                "isUtcTime": false,
+                "offset": 0
+            }
+        },
+        "LH": {
+            "on": {
+                "which": "first",
+                "day": 0,
+                "month": 9,
+                "hours": 2,
+                "minutes": 0,
+                "isUtcTime": false,
+                "offset": 30
+            },
+            "off": {
+                "which": "first",
+                "day": 0,
+                "month": 3,
+                "hours": 2,
+                "minutes": 0,
+                "isUtcTime": false,
+                "offset": 0
+            }
+        },
+        "Fiji": {
+            "on": {
+                "which": "last",
+                "day": 0,
+                "month": 9,
+                "hours": 2,
+                "minutes": 0,
+                "isUtcTime": false,
+                "offset": 60
+            },
+            "off": {
+                "which": "third",
+                "day": 0,
+                "month": 0,
+                "hours": 3,
+                "minutes": 0,
+                "isUtcTime": false,
+                "offset": 0
+            }
+        },
+        "NZ": {
+            "on": {
+                "which": "last",
+                "day": 0,
+                "month": 8,
+                "hours": 2,
+                "minutes": 0,
+                "isUtcTime": false,
+                "offset": 60
+            },
+            "off": {
+                "which": "first",
+                "day": 0,
+                "month": 3,
+                "hours": 2,
+                "minutes": 0,
+                "isUtcTime": false,
+                "offset": 0
+            }
+        },
+        "Chatham": {
+            "on": {
+                "which": "last",
+                "day": 0,
+                "month": 8,
+                "hours": 2,
+                "minutes": 45,
+                "isUtcTime": false,
+                "offset": 60
+            },
+            "off": {
+                "which": "first",
+                "day": 0,
+                "month": 3,
+                "hours": 2,
+                "minutes": 45,
+                "isUtcTime": false,
+                "offset": 0
+            }
+        },
+        "WS": {
+            "on": {
+                "which": "last",
+                "day": 0,
+                "month": 8,
+                "hours": 3,
+                "minutes": 0,
+                "isUtcTime": false,
+                "offset": 60
+            },
+            "off": {
+                "which": "first",
+                "day": 0,
+                "month": 3,
+                "hours": 4,
+                "minutes": 0,
+                "isUtcTime": false,
+                "offset": 0
+            }
+        },
+        "LY": {
+            "on": {
+                "which": "last",
+                "day": 5,
+                "month": 2,
+                "hours": 1,
+                "minutes": 0,
+                "isUtcTime": false,
+                "offset": 60
+            },
+            "off": {
+                "which": "last",
+                "day": 5,
+                "month": 9,
+                "hours": 2,
+                "minutes": 0,
+                "isUtcTime": false,
+                "offset": 0
+            }
+        },
+        "Morocco": {
+            "on": {
+                "which": "last",
+                "day": 0,
+                "month": 3,
+                "hours": 2,
+                "minutes": 0,
+                "isUtcTime": false,
+                "offset": 60
+            },
+            "off": {
+                "which": "last",
+                "day": 0,
+                "month": 8,
+                "hours": 3,
+                "minutes": 0,
+                "isUtcTime": false,
+                "offset": 0
+            }
+        },
+        "Namibia": {
+            "on": {
+                "which": "first",
+                "day": 0,
+                "month": 8,
+                "hours": 2,
+                "minutes": 0,
+                "isUtcTime": false,
+                "offset": 60
+            },
+            "off": {
+                "which": "first",
+                "day": 0,
+                "month": 3,
+                "hours": 2,
+                "minutes": 0,
+                "isUtcTime": false,
+                "offset": 0
+            }
+        }
+    };
+    /*
+    dont support iran, palestine since based on date and not day of month
+    dont supprort israel (zion) weird dst rule possible if another json maintained
+    dont support syria not clear information
 
+     */
+    var timezones = {
+        'Europe/Tirane': {
+            'offset': 60,
+            'dstRules': [{
+                'name': 'EU',
+                'from': 1985,
+                'until': 'max'
+            }]
+        },
+        'Europe/Andorra': {
+            'offset': 60,
+            'dstRules':[{
+                'name': 'EU',
+                'from': 1985,
+                'until': 'max'
+            }]
+        },
+        'Europe/Vienna': {
+            'offset': 60,
+            'dstRules': [{
+                'name':'EU',
+                'from': 1980,
+                'until': 'max'
+            }]
+        },
+        'Europe/Brussels': {
+            'offset': 60,
+            'dstRules': [{
+                'name': 'EU',
+                'from': 1977,
+                'until': 'max'
+            }]
+        },
+        'Europe/Sofia': {
+            'offset': 120,
+            'dstRules': [{
+                'name':'EU',
+                'from': 1997,
+                'until': 'max'
+            }]
+        },
+        'America/Los_Angeles': {
+            'offset': -480,
+            'dstRules': [{
+                'name':'US1',
+                'from': 1987,
+                'until': 2006
+            },
+                {
+                'name':'US2',
+                'from': 2007,
+                'until': 'max'
+            }]
+        },
+        'Asia/Kolkata': {
+            'offset': 330
+        },
+        'Etc/UTC': {
+            'offset': 0
+        }
     };
     var _date;
-    var _timezone;
+    var _timezoneName;
     var _timeStamp;
+
+    var nthDayOfMonth = function(which, day, month, year, hour, timezoneOffsetInMinutes){
+        var firstDateOfMonth = new Date(Date.UTC(year, month, 1, hour));
+        var firstDayOfMonth = firstDateOfMonth.getDay();
+        var offset = day - firstDayOfMonth;
+        if(offset < 0)
+            offset += 7;
+        firstDateOfMonth.setDate(firstDateOfMonth.getDate() + offset);
+        //firstDateOfMonth is now firstRequiredDay
+        var list = ['first', 'second', 'third', 'fourth', 'fifth'];
+        for(var i = 0; i < list.length; i++){
+            if(which === list[i])
+                break;
+            firstDateOfMonth.setDate(firstDateOfMonth.getDate() + 7);
+        }
+        if(which === 'last')
+            while(firstDateOfMonth.getMonth() !== month)
+                firstDateOfMonth.setDate(firstDateOfMonth.getDate() - 7);
+        if(timezoneOffsetInMinutes !== undefined)
+            firstDateOfMonth.setMinutes(firstDateOfMonth.getMinutes() - timezoneOffsetInMinutes)
+        return firstDateOfMonth;
+    };
+
+    var dateIsDST = function(date, timezoneOffsetInMinutes, onDSTRule, offDSTRule){
+        if(onDSTRule === undefined)
+            return false;
+        if(offDSTRule === undefined)
+            return false;
+
+        return (date >= nthDayOfMonth(onDSTRule['which'],
+            onDSTRule['day'],
+            onDSTRule['month'],
+            date.getFullYear(),
+            onDSTRule['hours'],
+            timezoneOffsetInMinutes)) &&
+            (date < nthDayOfMonth(offDSTRule['which'],
+                offDSTRule['day'],
+                offDSTRule['month'],
+                date.getFullYear(),
+                offDSTRule['hours'],
+                timezoneOffsetInMinutes + onDSTRule['offset']))
+    };
+
+    var getDSTRule = function(timezoneName, year, ruleStatus){
+        var dstRulesForTimezone = timezones[timezoneName]['dstRules'];
+        if(dstRulesForTimezone === undefined)
+            return undefined;
+        for(var i = 0; i < dstRulesForTimezone.length; i++){
+            var dstRule = dstRulesForTimezone[i];
+            if((dstRule['until'] === 'max' && dstRule['from'] <= year) ||
+                (dstRule['until'] > year && dstRule['from'] <= year))
+                return dstRules[dstRule['name']][ruleStatus];
+
+        }
+        return undefined;
+    };
 
     var create = function(unixEpoch, timezone){
         if(timezone === undefined || timezone === null) {
             timezone = "Etc/UTC";
         }
-        _timezone = timezone;
+        _timezoneName = timezone;
 
-        var _timezoneOffsetKeys = timezoneOffsetFor[_timezone].split(",");
-        var timezoneOffsetInMinutes = parseInt(_timezoneOffsetKeys[0]) + 60*parseInt(_timezoneOffsetKeys[1]);
+        var timezoneOffsetInMinutes = timezones[_timezoneName]['offset'];
 
         if(typeof unixEpoch == "number"){
             _timeStamp = unixEpoch;
-            if (_timezone !== "Etc/UTC") {
+            if (_timezoneName !== "Etc/UTC") {
             unixEpoch += (timezoneOffsetInMinutes * 60000);
             }
         }
@@ -101,12 +575,17 @@ Kshan = (function(unixEpoch, timezone){
             unixEpoch = (new Date(unixEpoch)).getTime();
 
             _timeStamp = unixEpoch;
-            if (_timezone !== "Etc/UTC") {
+            if (_timezoneName !== "Etc/UTC") {
                 _timeStamp -= (timezoneOffsetInMinutes * 60000);
             }
         }
-
         _date = new Date(unixEpoch);
+        var onDSTRule = getDSTRule(_timezoneName, _date.getUTCFullYear(), 'on');
+        var offDSTRule = getDSTRule(_timezoneName, _date.getUTCFullYear(), 'off');
+
+        if(dateIsDST(_date, timezoneOffsetInMinutes, onDSTRule, offDSTRule)){
+            _timeStamp -= onDSTRule['offset']*60000;
+        }
     };
 
     if(unixEpoch !== undefined && unixEpoch !== null)
@@ -140,7 +619,7 @@ Kshan = (function(unixEpoch, timezone){
             return _date.getUTCDay();
         },
         timezone: function(){
-            return _timezone;
+            return _timezoneName;
         },
         timeStamp: function(){
             return _timeStamp;

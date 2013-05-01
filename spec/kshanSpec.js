@@ -126,4 +126,32 @@ describe("kshan test suit", function(){
         expect(kshan.timezone()).toEqual("Asia/Kolkata");
     });
 
+    it('should return kshan for datetime string for timezone (observing DST and is in DST)', function(){
+        var kshan = Kshan('Apr 1, 2013', 'America/Los_Angeles');
+        expect(kshan.date()).toEqual(1);
+        expect(kshan.month()).toEqual(3);
+        expect(kshan.year()).toEqual(2013);
+        expect(kshan.hours()).toEqual(0);
+        expect(kshan.minutes()).toEqual(0);
+        expect(kshan.seconds()).toEqual(0);
+        expect(kshan.milliseconds()).toEqual(0);
+        expect(kshan.day()).toEqual(1);
+        expect(kshan.timeStamp()).toEqual(1364799600000);
+        expect(kshan.timezone()).toEqual("America/Los_Angeles");
+    });
+
+    it('should return kshan for datetime string for timezone (observing DST and is not in DST)', function(){
+        var kshan = Kshan('Mar 1, 2013', 'America/Los_Angeles');
+        expect(kshan.date()).toEqual(1);
+        expect(kshan.month()).toEqual(2);
+        expect(kshan.year()).toEqual(2013);
+        expect(kshan.hours()).toEqual(0);
+        expect(kshan.minutes()).toEqual(0);
+        expect(kshan.seconds()).toEqual(0);
+        expect(kshan.milliseconds()).toEqual(0);
+        expect(kshan.day()).toEqual(5);
+        expect(kshan.timeStamp()).toEqual(1362124800000);
+        expect(kshan.timezone()).toEqual("America/Los_Angeles");
+    });
+
 });
