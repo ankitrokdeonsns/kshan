@@ -554,6 +554,7 @@ Kshan = (function(unixEpoch, timezone){
     };
 
     var create = function(unixEpoch, timezone){
+        var typeofUnixEpoch = typeof unixEpoch;
         if(timezone === undefined || timezone === null) {
             timezone = "Etc/UTC";
         }
@@ -579,13 +580,18 @@ Kshan = (function(unixEpoch, timezone){
                 _timeStamp -= (timezoneOffsetInMinutes * 60000);
             }
         }
+
         _date = new Date(unixEpoch);
         var onDSTRule = getDSTRule(_timezoneName, _date.getUTCFullYear(), 'on');
         var offDSTRule = getDSTRule(_timezoneName, _date.getUTCFullYear(), 'off');
 
         if(dateIsDST(_date, timezoneOffsetInMinutes, onDSTRule, offDSTRule)){
-            _timeStamp -= onDSTRule['offset']*60000;
+            if(typeofUnixEpoch === 'number')
+                _date.setMinutes(_date.getMinutes() + onDSTRule['offset']);
+            else
+                _timeStamp -= onDSTRule['offset']*60000;
         }
+
     };
 
     if(unixEpoch !== undefined && unixEpoch !== null)
