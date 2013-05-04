@@ -515,28 +515,30 @@ Kshan = (function(unixEpoch, timezone){
             while(firstDateOfMonth.getMonth() !== month)
                 firstDateOfMonth.setDate(firstDateOfMonth.getDate() - 7);
         if(timezoneOffsetInMinutes !== undefined)
-            firstDateOfMonth.setMinutes(firstDateOfMonth.getMinutes() - timezoneOffsetInMinutes)
+            firstDateOfMonth.setMinutes(firstDateOfMonth.getMinutes() + timezoneOffsetInMinutes)
         return firstDateOfMonth;
     };
 
-    var dateIsDST = function(date, timezoneOffsetInMinutes, onDSTRule, offDSTRule){
+    var utcDateIsInDST = function(date, timezoneOffsetInMinutes, onDSTRule, offDSTRule){
         if(onDSTRule === undefined)
             return false;
         if(offDSTRule === undefined)
             return false;
-
-        return (date >= nthDayOfMonth(onDSTRule['which'],
+        var utcDateForDSTStart = nthDayOfMonth(onDSTRule['which'],
             onDSTRule['day'],
             onDSTRule['month'],
             date.getFullYear(),
             onDSTRule['hours'],
-            timezoneOffsetInMinutes)) &&
-            (date < nthDayOfMonth(offDSTRule['which'],
-                offDSTRule['day'],
-                offDSTRule['month'],
-                date.getFullYear(),
-                offDSTRule['hours'],
-                timezoneOffsetInMinutes + onDSTRule['offset']))
+            timezoneOffsetInMinutes);
+        var utcDateForDSTEnd = nthDayOfMonth(offDSTRule['which'],
+            offDSTRule['day'],
+            offDSTRule['month'],
+            date.getFullYear(),
+            offDSTRule['hours'],
+            timezoneOffsetInMinutes - onDSTRule['offset']);
+        debugger;
+        return (date >= utcDateForDSTStart) &&
+            (date < utcDateForDSTEnd)
     };
 
     var getDSTRule = function(timezoneName, year, ruleStatus){
@@ -585,7 +587,7 @@ Kshan = (function(unixEpoch, timezone){
         var onDSTRule = getDSTRule(_timezoneName, _date.getUTCFullYear(), 'on');
         var offDSTRule = getDSTRule(_timezoneName, _date.getUTCFullYear(), 'off');
 
-        if(dateIsDST(_date, timezoneOffsetInMinutes, onDSTRule, offDSTRule)){
+        if(utcDateIsInDST(new Date(_timeStamp), timezoneOffsetInMinutes, onDSTRule, offDSTRule)){
             if(typeofUnixEpoch === 'number')
                 _date.setMinutes(_date.getMinutes() + onDSTRule['offset']);
             else
