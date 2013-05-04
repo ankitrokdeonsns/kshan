@@ -474,7 +474,7 @@ Kshan = (function(unixEpoch, timezone){
             }]
         },
         'America/Los_Angeles': {
-            'offset': -480,
+            'offset': 480,
             'dstRules': [{
                 'name':'US1',
                 'from': 1987,
@@ -487,7 +487,7 @@ Kshan = (function(unixEpoch, timezone){
             }]
         },
         'Asia/Kolkata': {
-            'offset': 330
+            'offset': -330
         },
         'Etc/UTC': {
             'offset': 0
@@ -565,7 +565,7 @@ Kshan = (function(unixEpoch, timezone){
         if(typeof unixEpoch == "number"){
             _timeStamp = unixEpoch;
             if (_timezoneName !== "Etc/UTC") {
-            unixEpoch += (timezoneOffsetInMinutes * 60000);
+            unixEpoch -= (timezoneOffsetInMinutes * 60000);
             }
         }
 
@@ -577,7 +577,7 @@ Kshan = (function(unixEpoch, timezone){
 
             _timeStamp = unixEpoch;
             if (_timezoneName !== "Etc/UTC") {
-                _timeStamp -= (timezoneOffsetInMinutes * 60000);
+                _timeStamp += (timezoneOffsetInMinutes * 60000);
             }
         }
 
