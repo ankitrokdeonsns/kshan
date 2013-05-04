@@ -182,4 +182,31 @@ describe("kshan test suit", function(){
         expect(kshan.timezone()).toEqual("America/Los_Angeles");
     });
 
+    it('should return kshan for given datestring and timezone in southern hemisphere (observing DST and is in DST)', function(){
+        var kshan = Kshan('Jan 1, 2013', 'Australia/Sydney');
+        expect(kshan.date()).toEqual(1);
+        expect(kshan.month()).toEqual(0);
+        expect(kshan.year()).toEqual(2013);
+        expect(kshan.hours()).toEqual(0);
+        expect(kshan.minutes()).toEqual(0);
+        expect(kshan.seconds()).toEqual(0);
+        expect(kshan.milliseconds()).toEqual(0);
+        expect(kshan.day()).toEqual(2);
+        expect(kshan.timeStamp()).toEqual(1356958800000);
+        expect(kshan.timezone()).toEqual("Australia/Sydney");
+    });
+
+    it('should return kshan for given datestring and timezone in southern hemisphere (observing DST and is not in DST)', function(){
+        var kshan = Kshan('May 1, 2013', 'Australia/Sydney');
+        expect(kshan.date()).toEqual(1);
+        expect(kshan.month()).toEqual(4);
+        expect(kshan.year()).toEqual(2013);
+        expect(kshan.hours()).toEqual(0);
+        expect(kshan.minutes()).toEqual(0);
+        expect(kshan.seconds()).toEqual(0);
+        expect(kshan.milliseconds()).toEqual(0);
+        expect(kshan.day()).toEqual(3);
+        expect(kshan.timeStamp()).toEqual(1367330400000);
+        expect(kshan.timezone()).toEqual("Australia/Sydney");
+    });
 });

@@ -475,6 +475,7 @@ Kshan = (function(unixEpoch, timezone){
         },
         'America/Los_Angeles': {
             'offset': 480,
+            'isSouthernHemisphere': false,
             'dstRules': [{
                 'name':'US1',
                 'from': 1987,
@@ -491,6 +492,15 @@ Kshan = (function(unixEpoch, timezone){
         },
         'Etc/UTC': {
             'offset': 0
+        },
+        'Australia/Sydney': {
+            'offset': -600,
+            'isSouthernHemisphere': true,
+            'dstRules': [{
+                'name': 'Australia',
+                'from': 2008,
+                'until': 'max'
+            }]
         }
     };
     var _date;
@@ -519,7 +529,7 @@ Kshan = (function(unixEpoch, timezone){
         return firstDateOfMonth;
     };
 
-    var utcDateIsInDST = function(date, timezoneOffsetInMinutes, onDSTRule, offDSTRule){
+    var utcDateIsInDST = function(date, timezoneOffsetInMinutes, onDSTRule, offDSTRule, isSouthernHemisphere){
         if(onDSTRule === undefined)
             return false;
         if(offDSTRule === undefined)
@@ -533,10 +543,9 @@ Kshan = (function(unixEpoch, timezone){
         var utcDateForDSTEnd = nthDayOfMonth(offDSTRule['which'],
             offDSTRule['day'],
             offDSTRule['month'],
-            date.getFullYear(),
+            date.getFullYear() + isSouthernHemisphere,
             offDSTRule['hours'],
             timezoneOffsetInMinutes - onDSTRule['offset']);
-        debugger;
         return (date >= utcDateForDSTStart) &&
             (date < utcDateForDSTEnd)
     };
@@ -587,7 +596,7 @@ Kshan = (function(unixEpoch, timezone){
         var onDSTRule = getDSTRule(_timezoneName, _date.getUTCFullYear(), 'on');
         var offDSTRule = getDSTRule(_timezoneName, _date.getUTCFullYear(), 'off');
 
-        if(utcDateIsInDST(new Date(_timeStamp), timezoneOffsetInMinutes, onDSTRule, offDSTRule)){
+        if(utcDateIsInDST(new Date(_timeStamp), timezoneOffsetInMinutes, onDSTRule, offDSTRule, timezones[_timezoneName]['isSouthernHemisphere'])){
             if(typeofUnixEpoch === 'number')
                 _date.setMinutes(_date.getMinutes() + onDSTRule['offset']);
             else
