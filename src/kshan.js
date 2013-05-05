@@ -506,6 +506,7 @@ Kshan = (function(unixEpoch, timezone){
     var _date;
     var _timezoneName;
     var _timeStamp;
+    var _timezoneOffsetInMinutes;
 
     var nthDayOfMonth = function(which, day, month, year, hour, timezoneOffsetInMinutes){
         var firstDateOfMonth = new Date(Date.UTC(year, month, 1, hour));
@@ -524,8 +525,8 @@ Kshan = (function(unixEpoch, timezone){
         if(which === 'last')
             while(firstDateOfMonth.getMonth() !== month)
                 firstDateOfMonth.setDate(firstDateOfMonth.getDate() - 7);
-        if(timezoneOffsetInMinutes !== undefined)
-            firstDateOfMonth.setMinutes(firstDateOfMonth.getMinutes() + timezoneOffsetInMinutes)
+        if(_timezoneOffsetInMinutes !== undefined)
+            firstDateOfMonth.setMinutes(firstDateOfMonth.getMinutes() + _timezoneOffsetInMinutes)
         return firstDateOfMonth;
     };
 
@@ -539,13 +540,13 @@ Kshan = (function(unixEpoch, timezone){
             onDSTRule['month'],
             date.getFullYear(),
             onDSTRule['hours'],
-            timezoneOffsetInMinutes);
+            _timezoneOffsetInMinutes);
         var utcDateForDSTEnd = nthDayOfMonth(offDSTRule['which'],
             offDSTRule['day'],
             offDSTRule['month'],
             date.getFullYear() + isSouthernHemisphere,
             offDSTRule['hours'],
-            timezoneOffsetInMinutes - onDSTRule['offset']);
+            _timezoneOffsetInMinutes - onDSTRule['offset']);
         return (date >= utcDateForDSTStart) &&
             (date < utcDateForDSTEnd)
     };
@@ -564,51 +565,49 @@ Kshan = (function(unixEpoch, timezone){
         return undefined;
     };
 
-    var create = function(unixEpoch, timezone){
-        var typeofUnixEpoch = typeof unixEpoch;
-        if(timezone === undefined || timezone === null) {
-            timezone = "Etc/UTC";
+    var createFromUnixEpoch = function(unixEpoch){
+        _timeStamp = unixEpoch;
+        if (_timezoneName !== "Etc/UTC") {
+            unixEpoch -= (_timezoneOffsetInMinutes * 60000);
         }
-        _timezoneName = timezone;
-
-        var timezoneOffsetInMinutes = timezones[_timezoneName]['offset'];
-
-        if(typeof unixEpoch == "number"){
-            _timeStamp = unixEpoch;
-            if (_timezoneName !== "Etc/UTC") {
-            unixEpoch -= (timezoneOffsetInMinutes * 60000);
-            }
-        }
-
-        if(typeof unixEpoch === "string"){
-            if(unixEpoch.indexOf("GMT") === -1)
-                unixEpoch += " GMT";
-            unixEpoch = unixEpoch.substring(0, unixEpoch.indexOf("GMT")+3);
-            unixEpoch = (new Date(unixEpoch)).getTime();
-
-            _timeStamp = unixEpoch;
-            if (_timezoneName !== "Etc/UTC") {
-                _timeStamp += (timezoneOffsetInMinutes * 60000);
-            }
-        }
-
         _date = new Date(unixEpoch);
         var onDSTRule = getDSTRule(_timezoneName, _date.getUTCFullYear(), 'on');
         var offDSTRule = getDSTRule(_timezoneName, _date.getUTCFullYear(), 'off');
-
-        if(utcDateIsInDST(new Date(_timeStamp), timezoneOffsetInMinutes, onDSTRule, offDSTRule, timezones[_timezoneName]['isSouthernHemisphere'])){
-            if(typeofUnixEpoch === 'number')
-                _date.setMinutes(_date.getMinutes() + onDSTRule['offset']);
-            else
-                _timeStamp -= onDSTRule['offset']*60000;
-        }
-
+        if(utcDateIsInDST(new Date(_timeStamp), _timezoneOffsetInMinutes, onDSTRule, offDSTRule, timezones[_timezoneName]['isSouthernHemisphere']))
+            _date.setMinutes(_date.getMinutes() + onDSTRule['offset']);
     };
 
-    if(unixEpoch !== undefined && unixEpoch !== null)
-        create(unixEpoch, timezone);
+    var createFromUnixEpochForDateTimeValues = function(unixEpoch){
+        _timeStamp = unixEpoch;
+        if (_timezoneName !== "Etc/UTC") {
+            _timeStamp += (_timezoneOffsetInMinutes * 60000);
+        }
+        _date = new Date(unixEpoch);
+        var onDSTRule = getDSTRule(_timezoneName, _date.getUTCFullYear(), 'on');
+        var offDSTRule = getDSTRule(_timezoneName, _date.getUTCFullYear(), 'off');
+        if(utcDateIsInDST(new Date(_timeStamp), _timezoneOffsetInMinutes, onDSTRule, offDSTRule, timezones[_timezoneName]['isSouthernHemisphere']))
+            _timeStamp -= onDSTRule['offset']*60000;
+    };
+
+    if(arguments[1] === undefined || arguments[1] === null)
+        _timezoneName = "Etc/UTC";
     else
-        create((new Date()).getTime());
+        _timezoneName = arguments[1];
+
+    _timezoneOffsetInMinutes = timezones[_timezoneName]['offset'];
+
+    if(arguments.length === 0 || arguments[0] === undefined || arguments[0] === null)
+        createFromUnixEpoch((new Date()).getTime());
+    else{
+
+        if(typeof arguments[0] === 'number')
+            createFromUnixEpoch(arguments[0]);
+        if(typeof arguments[0] === 'string'){
+            if(arguments[0].indexOf("GMT") === -1)
+                arguments[0] += " GMT";
+            createFromUnixEpochForDateTimeValues(Date.parse(arguments[0].substring(0, arguments[0].indexOf("GMT")+3)));
+        }
+    }
 
     return {
         date: function(){
