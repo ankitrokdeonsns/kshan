@@ -538,15 +538,19 @@ Kshan = (function(unixEpoch, timezone){
         var utcDateForDSTStart = nthDayOfMonth(onDSTRule['which'],
             onDSTRule['day'],
             onDSTRule['month'],
-            date.getFullYear(),
+            date.getUTCFullYear(),
             onDSTRule['hours'],
             _timezoneOffsetInMinutes);
         var utcDateForDSTEnd = nthDayOfMonth(offDSTRule['which'],
             offDSTRule['day'],
             offDSTRule['month'],
-            date.getFullYear() + isSouthernHemisphere,
+            date.getUTCFullYear() + isSouthernHemisphere,
             offDSTRule['hours'],
             _timezoneOffsetInMinutes - onDSTRule['offset']);
+        if(isSouthernHemisphere && (date.getUTCMonth() < 6)){
+            utcDateForDSTStart.setUTCFullYear(utcDateForDSTStart.getUTCFullYear() - 1);
+            utcDateForDSTEnd.setUTCFullYear(utcDateForDSTEnd.getUTCFullYear() - 1);
+        }
         return (date >= utcDateForDSTStart) &&
             (date < utcDateForDSTEnd)
     };

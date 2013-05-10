@@ -114,13 +114,18 @@ describe("kshan test suit", function(){
         expectDateTimeValuesForKshanToBeEqual(kshan, 1, 2, 2013, 0, 0, 0, 0, 5, 1362124800000, "America/Los_Angeles");
     });
 
-    it('should return kshan for given datestring and timezone in southern hemisphere (observing DST and is in DST)', function(){
-        var kshan = Kshan('Jan 1, 2013', 'Australia/Sydney');
-        expectDateTimeValuesForKshanToBeEqual(kshan, 1, 0, 2013, 0, 0, 0, 0, 2, 1356958800000, "Australia/Sydney");
+    it('should return kshan for given datestring and timezone in southern hemisphere in later half of year(observing DST and is in DST)', function(){
+        var kshan = Kshan('Dec 31, 2012', 'Australia/Sydney');
+        expectDateTimeValuesForKshanToBeEqual(kshan, 31, 11, 2012, 0, 0, 0, 0, 1, 1356872400000, "Australia/Sydney");
     });
 
     it('should return kshan for given datestring and timezone in southern hemisphere (observing DST and is not in DST)', function(){
         var kshan = Kshan('May 1, 2013', 'Australia/Sydney');
         expectDateTimeValuesForKshanToBeEqual(kshan, 1, 4, 2013, 0, 0, 0, 0, 3, 1367330400000, "Australia/Sydney");
+    });
+
+    it('should return kshan for given datestring and timezone in southern hemisphere in first half of year (observing DST and is in DST)', function(){
+        var kshan = Kshan('Jan 31, 2013', 'Australia/Sydney');
+        expectDateTimeValuesForKshanToBeEqual(kshan, 31, 0, 2013, 0, 0, 0, 0, 4, 1359550800000, 'Australia/Sydney');
     });
 });
