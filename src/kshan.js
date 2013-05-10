@@ -508,26 +508,34 @@ Kshan = (function(){
     var _timeStamp;
     var _timezoneOffsetInMinutes;
 
-    var nthDayOfMonth = function(which, day, month, year, hour, timezoneOffsetInMinutes){
+    var getFirstDateForRequiredDay = function(year, month, hour, day) {
         var firstDateOfMonth = new Date(Date.UTC(year, month, 1, hour));
-        var firstDayOfMonth = firstDateOfMonth.getDay();
-        var offset = day - firstDayOfMonth;
-        if(offset < 0)
+        var offset = day - firstDateOfMonth.getUTCDay();
+        if (offset < 0)
             offset += 7;
-        firstDateOfMonth.setDate(firstDateOfMonth.getDate() + offset);
-        //firstDateOfMonth is now firstRequiredDay
+        firstDateOfMonth.setUTCDate(firstDateOfMonth.getUTCDate() + offset);
+        return firstDateOfMonth;
+    };
+
+    function getDateForNthRequiredDay(which, firstDateForRequiredDay, month) {
         var list = ['first', 'second', 'third', 'fourth', 'fifth'];
-        for(var i = 0; i < list.length; i++){
-            if(which === list[i])
+        for(var i = 0; i < list.length; i++) {
+            if (which === list[i])
                 break;
-            firstDateOfMonth.setDate(firstDateOfMonth.getDate() + 7);
+            firstDateForRequiredDay.setUTCDate(firstDateForRequiredDay.getUTCDate() + 7);
         }
         if(which === 'last')
-            while(firstDateOfMonth.getMonth() !== month)
-                firstDateOfMonth.setDate(firstDateOfMonth.getDate() - 7);
-        if(_timezoneOffsetInMinutes !== undefined)
-            firstDateOfMonth.setMinutes(firstDateOfMonth.getMinutes() + _timezoneOffsetInMinutes)
-        return firstDateOfMonth;
+            while(firstDateForRequiredDay.getMonth() !== month)
+                firstDateForRequiredDay.setUTCDate(firstDateForRequiredDay.getUTCDate() - 7);
+        return firstDateForRequiredDay;
+    }
+
+    var getDateForNthDayOfMonthForTimezone = function(which, day, month, year, hour, timezoneOffsetInMinutes){
+        var firstDateForRequiredDay = getFirstDateForRequiredDay(year, month, hour, day);
+        var dateForNthRequiredDay = getDateForNthRequiredDay(which, firstDateForRequiredDay, month);
+        if (timezoneOffsetInMinutes !== undefined && timezoneOffsetInMinutes !== null)
+            dateForNthRequiredDay.setUTCMinutes(dateForNthRequiredDay.getUTCMinutes() + timezoneOffsetInMinutes);
+        return dateForNthRequiredDay;
     };
 
     var utcDateIsInDST = function(date, timezoneOffsetInMinutes, onDSTRule, offDSTRule, isSouthernHemisphere){
@@ -535,18 +543,18 @@ Kshan = (function(){
             return false;
         if(offDSTRule === undefined)
             return false;
-        var utcDateForDSTStart = nthDayOfMonth(onDSTRule['which'],
-            onDSTRule['day'],
-            onDSTRule['month'],
-            date.getUTCFullYear(),
-            onDSTRule['hours'],
-            _timezoneOffsetInMinutes);
-        var utcDateForDSTEnd = nthDayOfMonth(offDSTRule['which'],
-            offDSTRule['day'],
-            offDSTRule['month'],
-            date.getUTCFullYear() + isSouthernHemisphere,
-            offDSTRule['hours'],
-            _timezoneOffsetInMinutes - onDSTRule['offset']);
+        var utcDateForDSTStart = getDateForNthDayOfMonthForTimezone(onDSTRule['which'],
+                                                                    onDSTRule['day'],
+                                                                    onDSTRule['month'],
+                                                                    date.getUTCFullYear(),
+                                                                    onDSTRule['hours'],
+                                                                    _timezoneOffsetInMinutes);
+        var utcDateForDSTEnd = getDateForNthDayOfMonthForTimezone(offDSTRule['which'],
+                                                                    offDSTRule['day'],
+                                                                    offDSTRule['month'],
+                                                                    date.getUTCFullYear() + isSouthernHemisphere,
+                                                                    offDSTRule['hours'],
+                                                                    _timezoneOffsetInMinutes - onDSTRule['offset']);
         if(isSouthernHemisphere && (date.getUTCMonth() < 6)){
             utcDateForDSTStart.setUTCFullYear(utcDateForDSTStart.getUTCFullYear() - 1);
             utcDateForDSTEnd.setUTCFullYear(utcDateForDSTEnd.getUTCFullYear() - 1);
@@ -578,7 +586,7 @@ Kshan = (function(){
         var onDSTRule = getDSTRule(_timezoneName, _date.getUTCFullYear(), 'on');
         var offDSTRule = getDSTRule(_timezoneName, _date.getUTCFullYear(), 'off');
         if(utcDateIsInDST(new Date(_timeStamp), _timezoneOffsetInMinutes, onDSTRule, offDSTRule, timezones[_timezoneName]['isSouthernHemisphere']))
-            _date.setMinutes(_date.getMinutes() + onDSTRule['offset']);
+            _date.setUTCMinutes(_date.getUTCMinutes() + onDSTRule['offset']);
     };
 
     var createFromUnixEpochForDateTimeValues = function(unixEpoch){
