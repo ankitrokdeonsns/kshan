@@ -1,4 +1,4 @@
-Kshan = (function(unixEpoch, timezone){
+Kshan = (function(){
 
     var dstRules = {
         "EU": {
@@ -602,15 +602,21 @@ Kshan = (function(unixEpoch, timezone){
 
     if(arguments.length === 0 || arguments[0] === undefined || arguments[0] === null)
         createFromUnixEpoch((new Date()).getTime());
-    else{
 
-        if(typeof arguments[0] === 'number')
-            createFromUnixEpoch(arguments[0]);
-        if(typeof arguments[0] === 'string'){
-            if(arguments[0].indexOf("GMT") === -1)
-                arguments[0] += " GMT";
-            createFromUnixEpochForDateTimeValues(Date.parse(arguments[0].substring(0, arguments[0].indexOf("GMT")+3)));
-        }
+    if(typeof arguments[0] === 'number')
+        createFromUnixEpoch(arguments[0]);
+
+    if(typeof arguments[0] === 'string'){
+        if(arguments[0].indexOf("GMT") === -1)
+            arguments[0] += " GMT";
+        createFromUnixEpochForDateTimeValues(Date.parse(arguments[0].substring(0, arguments[0].indexOf("GMT")+3)));
+    }
+
+    if(Array.isArray(arguments[0])){
+        var input = [];
+        for(var i=0; i < 7; i++)
+            input[i] = (arguments[0][i] == null) ? (i === 2 ? 1 : 0) : arguments[0][i];
+        createFromUnixEpochForDateTimeValues(Date.UTC(input[0], input[1], input[2], input[3], input[4], input[5], input[6]));
     }
 
     return {

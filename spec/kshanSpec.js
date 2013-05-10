@@ -128,4 +128,10 @@ describe("kshan test suit", function(){
         var kshan = Kshan('Jan 31, 2013', 'Australia/Sydney');
         expectDateTimeValuesForKshanToBeEqual(kshan, 31, 0, 2013, 0, 0, 0, 0, 4, 1359550800000, 'Australia/Sydney');
     });
+
+    it('should construct utc kshan for given datetime array', function(){
+        var kshan = Kshan([2013, 0, 1, 0, 0, 0, 0]);
+        expectDateTimeValuesForKshanToBeEqual(kshan, 1, 0, 2013, 0, 0, 0, 0, 2, 1356998400000, 'Etc/UTC');
+    });
+
 });
