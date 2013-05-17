@@ -428,7 +428,7 @@ Kshan = (function(){
     };
     /*
     dont support iran, palestine since based on date and not day of month
-    dont supprort israel (zion) weird dst rule possible if another json maintained
+    dont support israel (zion) weird dst rule possible if another json maintained
     dont support syria not clear information
 
      */
@@ -601,7 +601,7 @@ Kshan = (function(){
             _timeStamp -= onDSTRule['offset']*60000;
     };
 
-    if(arguments[1] === undefined || arguments[1] === null)
+    if(arguments[1] === undefined || arguments[1] === null || timezones[arguments[1]] === undefined)
         _timezoneName = "Etc/UTC";
     else
         _timezoneName = arguments[1];

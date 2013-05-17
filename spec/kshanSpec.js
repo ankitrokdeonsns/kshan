@@ -134,4 +134,15 @@ describe("kshan test suit", function(){
         expectDateTimeValuesForKshanToBeEqual(kshan, 1, 0, 2013, 0, 0, 0, 0, 2, 1356998400000, 'Etc/UTC');
     });
 
+    it('timezone should default to Etc/UTC if timezone name is not found in list of timezones', function(){
+        var kshan = Kshan(0, 'random timezone');
+        expect('Etc/UTC').toEqual(kshan.timezone());
+    });
+
+    it('timezone should default to Etc/UTC if timezone name is not a string', function(){
+        var pretendingToBeTimezoneName = 0;
+        var kshan = Kshan(0, pretendingToBeTimezoneName);
+        expect('Etc/UTC').toEqual(kshan.timezone());
+    })
+
 });
