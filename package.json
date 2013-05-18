@@ -1,14 +1,22 @@
 {
   "name": "kshan",
-  "version": "0.0.0",
-  "description": "1.Why not timezone.js or walltime.js they require tz database files to be included for set up",
-  "main": "Gruntfile.js",
+  "version": "0.5.0",
+  "description": "Datetimes for various timezones",
+  "main": "src/kshan.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "grunt"
   },
-  "repository": "",
-  "author": "",
-  "license": "BSD",
+  "repository": {
+      "type": "git",
+      "url": "https://github.com/ankitrokdeonsns/kshan.git"
+  },
+  "bugs": {
+      "url": "https://github.com/ankitrokdeonsns/kshan/issues"
+  },
+  "author": "Ankit Rokde <ankitrokdeonsns@gmail.com>",
+  "licenses": {
+      "type": "MIT"
+  },
   "readmeFilename": "README.md",
   "devDependencies": {
     "grunt-contrib-jasmine": "~0.4.1"
