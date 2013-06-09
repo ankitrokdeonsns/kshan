@@ -143,6 +143,13 @@ describe("kshan test suit", function(){
         var pretendingToBeTimezoneName = 0;
         var kshan = Kshan(0, pretendingToBeTimezoneName);
         expect('Etc/UTC').toEqual(kshan.timezone());
-    })
+    });
+
+    it('should return difference between two kshans in milliseconds', function(){
+        var kshan1 = Kshan(0);
+        var kshan2 = Kshan(2);
+        expect(2).toEqual(kshan1.diff(kshan2));
+        expect(2).toEqual(kshan2.diff(kshan1));
+    });
 
 });

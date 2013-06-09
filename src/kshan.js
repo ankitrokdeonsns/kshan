@@ -664,7 +664,11 @@ Kshan = (function(){
             else if (_timeStamp > other.timeStamp())
                 return 1;
             return 0;
+        },
+        diff: function(other){
+            return Math.abs(_timeStamp - other.timeStamp());
         }
+
     }
 });
 
