@@ -704,8 +704,49 @@ Kshan = (function(){
         },
         diff: function(other){
             return Math.abs(_timeStamp - other.timeStamp());
-        }
-
+        },
+		addMilliseconds: function(millis){
+			return Kshan(_timeStamp + millis, _timezoneName);
+		},
+		addSeconds: function(seconds){
+			return this.addMilliseconds(seconds * 1e3);
+		},
+		addMinutes: function(minutes){
+			return this.addMilliseconds(minutes * 6e4);
+		},
+		addHours: function(hours){
+			return this.addMilliseconds(hours * 36e5);
+		},
+		addDays: function(days){
+			return this.addMilliseconds(days * 864e5);
+		},
+		addMonths: function(months){
+			return this.addMilliseconds(months * 2592e6);
+		},
+		addYears: function(years){
+			return this.addMilliseconds(years * 31536e6);
+        },
+		subtractMilliseconds: function(millis){
+			return this.addMilliseconds(-millis);
+		},
+		subtractSeconds: function(seconds){
+			return this.addSeconds(-seconds);
+		},
+		subtractMinutes: function(minutes){
+			return this.addMinutes(-minutes);
+		},
+		subtractHours: function(hours){
+			return this.addHours(-hours);
+		},
+		subtractDays: function(days){
+			return this.addDays(-days);
+		},
+		subtractMonths: function(months){
+			return this.addMonths(-months);
+		},
+		subtractYears: function(years){
+			return this.addYears(-years);
+		}
     }
 });
 module.exports = Kshan;

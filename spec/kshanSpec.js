@@ -193,4 +193,89 @@ describe("kshan test suit", function(){
         kshan.milliseconds(1);
         expectDateTimeValuesForKshanToBeEqual(kshan, 1, 0, 1970, 0, 0, 0, 1, 4, 1, 'Etc/UTC');
     });
+
+	it('should add milliseconds to kshan', function(){
+		var kshan = Kshan('Jan 1, 1970');
+		var modified = kshan.addMilliseconds(1);
+        expectDateTimeValuesForKshanToBeEqual(modified, 1, 0, 1970, 0, 0, 0, 1, 4, 1, 'Etc/UTC');
+	});
+
+	it('should add seconds to kshan', function(){
+		var kshan = Kshan('Jan 1, 1970');
+		var modified = kshan.addSeconds(1);
+        expectDateTimeValuesForKshanToBeEqual(modified, 1, 0, 1970, 0, 0, 1, 0, 4, 1000, 'Etc/UTC');
+	});
+
+	it('should add minutes to kshan', function(){
+		var kshan = Kshan('Jan 1, 1970');
+		var modified = kshan.addMinutes(1);
+        expectDateTimeValuesForKshanToBeEqual(modified, 1, 0, 1970, 0, 1, 0, 0, 4, 60000, 'Etc/UTC');
+	});
+
+	it('should add hours to kshan', function(){
+		var kshan = Kshan('Jan 1, 1970');
+		var modified = kshan.addHours(1);
+        expectDateTimeValuesForKshanToBeEqual(modified, 1, 0, 1970, 1, 0, 0, 0, 4, 3600000, 'Etc/UTC');
+	});
+
+	it('should add days to kshan', function(){
+		var kshan = Kshan('Jan 1, 1970');
+		var modified = kshan.addDays(1);
+        expectDateTimeValuesForKshanToBeEqual(modified, 2, 0, 1970, 0, 0, 0, 0, 5, 86400000, 'Etc/UTC');
+	});
+
+	it('should add months to kshan', function(){
+		var kshan = Kshan('Jan 1, 1970');
+		var modified = kshan.addMonths(1);
+        expectDateTimeValuesForKshanToBeEqual(modified, 31, 0, 1970, 0, 0, 0, 0, 6, 2592e6, 'Etc/UTC');
+	});
+
+	it('should add years to kshan', function(){
+		var kshan = Kshan('Jan 1, 1970');
+		var modified = kshan.addYears(1);
+        expectDateTimeValuesForKshanToBeEqual(modified, 1, 0, 1971, 0, 0, 0, 0, 5, 31536e6, 'Etc/UTC');
+	});
+
+	it('should subtract milliseconds to kshan', function(){
+		var kshan = Kshan('Jan 1, 1970');
+		var modified = kshan.subtractMilliseconds(1);
+        expectDateTimeValuesForKshanToBeEqual(modified, 31, 11, 1969, 23, 59, 59, 999, 3, -1, 'Etc/UTC');
+	});
+
+	it('should subtract seconds to kshan', function(){
+		var kshan = Kshan('Jan 1, 1970');
+		var modified = kshan.subtractSeconds(1);
+        expectDateTimeValuesForKshanToBeEqual(modified, 31, 11, 1969, 23, 59, 59, 0, 3, -1000, 'Etc/UTC');
+	});
+
+	it('should subtract minutes to kshan', function(){
+		var kshan = Kshan('Jan 1, 1970');
+		var modified = kshan.subtractMinutes(1);
+        expectDateTimeValuesForKshanToBeEqual(modified, 31, 11, 1969, 23, 59, 0, 0, 3, -60000, 'Etc/UTC');
+	});
+
+	it('should subtract hours to kshan', function(){
+		var kshan = Kshan('Jan 1, 1970');
+		var modified = kshan.subtractHours(1);
+        expectDateTimeValuesForKshanToBeEqual(modified, 31, 11, 1969, 23, 0, 0, 0, 3, -3600000, 'Etc/UTC');
+	});
+
+	it('should subtract days to kshan', function(){
+		var kshan = Kshan('Jan 1, 1970');
+		var modified = kshan.subtractDays(1);
+        expectDateTimeValuesForKshanToBeEqual(modified, 31, 11, 1969, 0, 0, 0, 0, 3, -86400000, 'Etc/UTC');
+	});
+
+	it('should subtract months to kshan', function(){
+		var kshan = Kshan('Jan 1, 1970');
+		var modified = kshan.subtractMonths(1);
+        expectDateTimeValuesForKshanToBeEqual(modified, 2, 11, 1969, 0, 0, 0, 0, 2, -2592e6, 'Etc/UTC');
+	});
+
+	it('should subtract years to kshan', function(){
+		var kshan = Kshan('Jan 1, 1970');
+		var modified = kshan.subtractYears(1);
+        expectDateTimeValuesForKshanToBeEqual(modified, 1, 0, 1969, 0, 0, 0, 0, 3, -31536e6, 'Etc/UTC');
+	});
+
 });
