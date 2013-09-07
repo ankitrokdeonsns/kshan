@@ -601,6 +601,36 @@ Kshan = (function(){
             _timeStamp -= onDSTRule['offset']*60000;
     };
 
+	var set = function(type, value){
+		var oldTimeStamp = _date.getTime();
+        if(value !== null  && value !== undefined){
+			switch(type){
+				case 'date':
+					_date.setUTCDate(value);
+					break;
+				case 'month':
+					_date.setUTCMonth(value);
+					break;
+				case 'year':
+					_date.setUTCFullYear(value);
+					break;
+				case 'hours':
+					_date.setUTCHours(value);
+					break;
+				case 'minutes':
+					_date.setUTCMinutes(value);
+					break;
+				case 'seconds':
+					_date.setUTCSeconds(value);
+					break;
+				case 'milliseconds':
+					_date.setUTCMilliseconds(value);
+					break;
+			}
+			_timeStamp += (_date.getTime() - oldTimeStamp);
+		}
+	}
+
     if(arguments[1] === undefined || arguments[1] === null || timezones[arguments[1]] === undefined)
         _timezoneName = "Etc/UTC";
     else
@@ -628,25 +658,32 @@ Kshan = (function(){
     }
 
     return {
-        date: function(){
+        date: function(dateToBeSet){
+			set('date', dateToBeSet);
             return _date.getUTCDate();
         },
-        month: function(){
+        month: function(monthToBeSet){
+			set('month', monthToBeSet);
             return _date.getUTCMonth();
         },
-        year: function(){
-            return _date.getUTCFullYear();
+        year: function(yearToBeSet){
+			set('year', yearToBeSet);
+			return _date.getUTCFullYear();
         },
-        hours:function () {
+        hours:function (hoursToBeSet) {
+			set('hours', hoursToBeSet);
             return _date.getUTCHours();
         },
-        minutes:function () {
+        minutes:function (minutesToBeSet) {
+			set('minutes', minutesToBeSet);
             return _date.getUTCMinutes();
         },
-        seconds:function () {
+        seconds:function (secondsToBeSet) {
+			set('seconds', secondsToBeSet);
             return _date.getUTCSeconds();
         },
-        milliseconds:function () {
+        milliseconds:function (millisecondsToBeSet) {
+			set('milliseconds', millisecondsToBeSet);
             return _date.getUTCMilliseconds();
         },
         day:function(){
@@ -671,4 +708,4 @@ Kshan = (function(){
 
     }
 });
-
+module.exports = Kshan;
