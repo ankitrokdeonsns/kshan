@@ -1,24 +1,24 @@
 {
-  "name": "kshan",
-  "version": "0.6.0",
-  "description": "Datetimes for various timezones",
-  "main": "./src/kshan.js",
-  "scripts": {
-    "test": "grunt"
-  },
-  "repository": {
-      "type": "git",
-      "url": "https://github.com/ankitrokdeonsns/kshan.git"
-  },
-  "bugs": {
-      "url": "https://github.com/ankitrokdeonsns/kshan/issues"
-  },
-  "author": "Ankit Rokde <ankitrokdeonsns@gmail.com>",
-  "licenses": {
-      "type": "MIT"
-  },
-  "readmeFilename": "README.md",
-  "devDependencies": {
-    "grunt-contrib-jasmine": "~0.4.1"
-  }
+    "name": "kshan",
+    "version": "0.7.0",
+    "description": "Datetimes for various timezones",
+    "main": "./src/kshan.js",
+    "scripts": {
+        "test": "grunt"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/ankitrokdeonsns/kshan.git"
+    },
+    "bugs": {
+        "url": "https://github.com/ankitrokdeonsns/kshan/issues"
+    },
+    "author": "Ankit Rokde <ankitrokdeonsns@gmail.com>",
+    "licenses": {
+        "type": "MIT"
+    },
+    "readmeFilename": "README.md",
+    "devDependencies": {
+        "grunt-contrib-jasmine": "~0.5.2"
+    }
 }

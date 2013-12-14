@@ -604,6 +604,7 @@ Kshan = (function(){
 	var set = function(type, value){
 		var oldTimeStamp = _date.getTime();
         if(value !== null  && value !== undefined){
+			//refactor to map[type](value)
 			switch(type){
 				case 'date':
 					_date.setUTCDate(value);
@@ -746,7 +747,43 @@ Kshan = (function(){
 		},
 		subtractYears: function(years){
 			return this.addYears(-years);
-		}
+		},
+		startOfSecond: function(){
+			return Kshan(Math.floor(_timeStamp / 1e3) * 1e3, _timezoneName);
+		},
+		startOfMinute: function(){
+			return Kshan(Math.floor(_timeStamp / 6e4) * 6e4, _timezoneName);
+		},
+		startOfHour: function(){
+			return Kshan(Math.floor(_timeStamp / 36e5) * 36e5, _timezoneName);
+		},
+		startOfDay: function(){
+			return Kshan(Math.floor(_timeStamp / 864e5) * 864e5, _timezoneName);
+		},
+		startOfMonth: function(){
+			return Kshan(Math.floor(_timeStamp / 2592e6) * 2592e6, _timezoneName);
+		},
+		startOfYear: function(){
+			return Kshan(Math.floor(_timeStamp / 31536e6) * 31536e6, _timezoneName);
+		},
+		endOfSecond: function(){
+			return this.startOfSecond().addMilliseconds(999);
+		},
+		endOfMinute: function(){
+			return this.startOfMinute().addMilliseconds(6e4 - 1);
+		},
+		endOfHour: function(){
+			return this.startOfHour().addMilliseconds(36e5 - 1);
+		},
+		endOfDay: function(){
+			return this.startOfDay().addMilliseconds(864e5 - 1);
+		},
+		endOfMonth: function(){
+			return this.startOfMonth().addMilliseconds(2592e6 -1);
+		},
+		endOfYear: function(){
+			return this.startOfYear().addMilliseconds(31536e6 -1);
+        }
     }
+
 });
-module.exports = Kshan;
